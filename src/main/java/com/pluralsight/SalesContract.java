@@ -48,6 +48,23 @@ public class SalesContract extends Contract {
     @Override
     public double getMonthlyPayment(){
 
+        double totalPrice = getTotalPrice();
+        double annualRate = (totalPrice > 10000.00) ? 0.0425 : 0.0525;
+        double monthlyRate = annualRate / 12;
+        int months = (totalPrice > 10000) ? 48 : 24;
+
+        //total price times monthly rate * math(+1,monthlyrate and months(being the exp))
+        //then divide it by (1+ monthly rate, months behind exp) -1)
+        //double monthlyPayment = (totalPrice * monthlyRate * Math.pow(1 + monthlyRate, months))
+            //    / (Math.pow(1 + monthlyRate , months)- 1);
+
+       //double numerator = totalPrice * monthlyRate;
+        //double demoninator = 1- Math.pow(1 + monthlyRate, -months);
+        //double monthlyPayment = (totalPrice * monthlyRate) / (1- Math.pow(1 + monthlyRate, - months));
+        double monthlyPayment = (totalPrice / monthlyRate) + (totalPrice * monthlyRate);
+
+
+
         //double rate = (price < 10000 ? 0.425:0.50);
 
         return 0;

@@ -34,7 +34,7 @@ public class SalesContract extends Contract {
     }
 
     @Override
-    public double getTotalPayment(){
+    public double getTotalPrice(){
         double vehiclePrice = getVehicleSold().getPrice();
 
 

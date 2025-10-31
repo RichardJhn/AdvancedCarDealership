@@ -9,8 +9,8 @@ public class LeaseContract extends Contract {
                          Vehicle vehicleSold, double totalPrice, double monthlyPayment,
                          double endValue, double leaseFee) {
         super(date, customerName, customerEmail, vehicleSold, totalPrice, monthlyPayment);
-        this.endValue = endValue;
-        this.leaseFee = leaseFee;
+        this.endValue = endValue = vehicleSold.getPrice() * 0.5; // 50% of original value
+        this.leaseFee = leaseFee = vehicleSold.getPrice() * 0.07; // The 7% lease fee
     }
 
     public double getEndValue() {
@@ -20,16 +20,24 @@ public class LeaseContract extends Contract {
     public double getLeaseFee() {
         return leaseFee;
     }
-    public double getTotalPayment(){
+    @Override
+    public double getTotalPrice(){
 
-        return 0;
+
+        return getVehicleSold().getPrice() + leaseFee;
 
     }
 
-
+    @Override
     public double getMonthlyPayment(){
 
-        return 0;
+        double totalPrice = getTotalPrice();
+        double annualRate = .04;
+        double monthlyRate = annualRate / 12;
+        int months = 36;
+        double monthlyPayment = (totalPrice / months) + (totalPrice * monthlyRate);
+
+        return monthlyPayment;
     }
 }
 

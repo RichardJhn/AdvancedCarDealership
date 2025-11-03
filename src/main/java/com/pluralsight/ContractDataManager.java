@@ -34,6 +34,10 @@ public class ContractDataManager {
                             sale.getMonthlyPayment());
 
             }
+                bufferedWriter.write(line);
+                bufferedWriter.newLine();
+                bufferedWriter.close();
+            System.out.println("Contract Saved: " + line);
 
 
         } catch (Exception e) {

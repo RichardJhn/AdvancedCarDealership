@@ -29,6 +29,10 @@ public class Dealership {
         return address;
     }
 
+    public void removeVehicle(Vehicle vehicle){
+        inventory.remove(vehicle);
+    }
+
     public String getName() {
         return name;
     }

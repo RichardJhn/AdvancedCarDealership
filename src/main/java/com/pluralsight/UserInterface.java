@@ -2,12 +2,14 @@ package com.pluralsight;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
+import java.time.*;
 public class UserInterface{
 
     private DealershipFileManager dealershipFileManager = new DealershipFileManager();
     private Dealership dealership = dealershipFileManager.getDealership();
     private ArrayList<Vehicle> inventory = new ArrayList<>();
     Scanner scanner = new Scanner(System.in);
+
 
     public void displayScreen() {
 
@@ -231,38 +233,45 @@ public class UserInterface{
         int vin = Integer.parseInt((scanner.nextLine()));
 
         Vehicle vehicle = dealership.getVehicleByVin(vin);
+
+        System.out.println("Will the customer be financing the vehicle? (Y/N)");
+
+        boolean isFinanced = scanner.nextLine().equalsIgnoreCase("Y");
+
+        SalesContract sale = new SalesContract(LocalDate.now().toString(), name, email, vehicle, isFinanced);
+
+        ContractDataManager dataManager = new ContractDataManager();
+        dataManager.saveContract(sale);
         Vehicle toRemove = null;
-        for (Vehicle v : dealership.getAllVehicles()) {
-            if (v.getVin() == vin) {
-                //    inventory.remove(v);
-                toRemove = v;
-                break;
-            }
-        }
 
-        if (toRemove != null) {
-            // remove the vehicle
-            dealership.getAllVehicles().remove(toRemove);
-
-            // save the updated dealership to CSV.
-            DealershipFileManager.saveDealership(dealership);
-            System.out.println("Vehicle has been removed ");
-
-        }
-        else {
-            System.out.println("Vehicle with vin: " + vin + " not found.");
-        }
-
-        if(vehicle == null){
-            System.out.println("Vehicle not found");
-            return;
-        }
+        dealership.removeVehicle(vehicle);
+        System.out.println("Sale has been processed successfully");
 
     }
 
 
 
     private void lease(){
+        System.out.println("Enter your name:");
+        String name = scanner.nextLine();
+
+        System.out.println("Enter your email");
+        String email = scanner.nextLine();
+
+        System.out.println("Enter the VIN number of the vehicle:");
+        int vin = Integer.parseInt((scanner.nextLine()));
+
+        Vehicle vehicle = dealership.getVehicleByVin(vin);
+
+        LeaseContract lease = new LeaseContract(LocalDate.now().toString(), name, email, vehicle);
+
+        ContractDataManager dataManager = new ContractDataManager();
+        dataManager.saveContract(lease);
+
+        dealership.getAllVehicles().remove(vehicle);
+        DealershipFileManager.saveDealership(dealership);
+
+        System.out.println("Lease contract has been processed successfully");
 
     }
 

@@ -62,8 +62,6 @@ public class SalesContract extends Contract {
         //double monthlyPayment = (totalPrice * monthlyRate) / (1- Math.pow(1 + monthlyRate, - months));
         double monthlyPayment = (totalPrice / monthlyRate) + (totalPrice * monthlyRate);
 
-
-
         //double rate = (price < 10000 ? 0.425:0.50);
 
         return 0;

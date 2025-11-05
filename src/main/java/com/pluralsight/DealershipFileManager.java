@@ -58,7 +58,7 @@ public class DealershipFileManager {
     }
 
 
-    public static void saveDealership(Dealership dealership){
+    public void saveDealership(Dealership dealership){
         try{ FileWriter filewriter = new FileWriter("inventory.csv");
             BufferedWriter bufferedWriter = new BufferedWriter(filewriter);
             for (Vehicle v : dealership.getAllVehicles()){
@@ -76,6 +76,7 @@ public class DealershipFileManager {
             bufferedWriter.close();
 
         }catch (Exception e){
+            System.out.println("error saving dealership");
 
         }
 

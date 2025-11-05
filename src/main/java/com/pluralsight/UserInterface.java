@@ -30,6 +30,7 @@ public class UserInterface{
                     7 - Last ALL vehicles
                     8 - Add a vehicle
                     9 - Remove a vehicle
+                    11 - Move to contract screen
                     99 - Quit""");
 
             System.out.println("Enter your choice:");
@@ -145,7 +146,8 @@ public class UserInterface{
             dealership.getAllVehicles().remove(toRemove);
 
             // save the updated dealership to CSV.
-            DealershipFileManager.saveDealership(dealership);
+            DealershipFileManager dfm = new DealershipFileManager();
+            dfm.saveDealership(dealership);
             System.out.println("Vehicle has been removed ");
 
         }
@@ -153,7 +155,7 @@ public class UserInterface{
             System.out.println("Vehicle with vin: " + vin + " not found.");
         }
     }
-    public void addNewVehicle() {
+    private void addNewVehicle() {
         try{
             Scanner scanner = new Scanner(System.in);
             FileWriter myWriter = new FileWriter("inventory.csv", true);
@@ -240,10 +242,13 @@ public class UserInterface{
 
         SalesContract sale = new SalesContract(LocalDate.now().toString(), name, email, vehicle, isFinanced);
 
+        //saving
         ContractDataManager dataManager = new ContractDataManager();
         dataManager.saveContract(sale);
-        Vehicle toRemove = null;
-
+        //removing from inventory
+        dealership.removeVehicle(vehicle);
+        DealershipFileManager dfm = new DealershipFileManager();
+        dfm.saveDealership(dealership);
         dealership.removeVehicle(vehicle);
         System.out.println("Sale has been processed successfully");
 
@@ -267,9 +272,10 @@ public class UserInterface{
 
         ContractDataManager dataManager = new ContractDataManager();
         dataManager.saveContract(lease);
+        dealership.removeVehicle(vehicle);
+        DealershipFileManager dfm = new DealershipFileManager();
+        dfm.saveDealership(dealership);
 
-        dealership.getAllVehicles().remove(vehicle);
-        DealershipFileManager.saveDealership(dealership);
 
         System.out.println("Lease contract has been processed successfully");
 

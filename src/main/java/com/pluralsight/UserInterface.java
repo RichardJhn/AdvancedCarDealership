@@ -7,16 +7,15 @@ public class UserInterface{
     private DealershipFileManager dealershipFileManager = new DealershipFileManager();
     private Dealership dealership = dealershipFileManager.getDealership();
     private ArrayList<Vehicle> inventory = new ArrayList<>();
-
+    Scanner scanner = new Scanner(System.in);
 
     public void displayScreen() {
-        Scanner scanner = new Scanner(System.in);
+
         //  DealershipFileManager dealershipFileManager = new DealershipFileManager();
         //  Dealership dealership = dealershipFileManager.loadDealership("inventory.csv");
 
         init();
         String choice = "";
-
 
         while (!choice.equalsIgnoreCase("99")){
             System.out.println("""
@@ -36,7 +35,6 @@ public class UserInterface{
             choice = scanner.nextLine().trim();
 
             //here we code the options
-
 
             try (BufferedReader reader = new BufferedReader(new FileReader("inventory.csv"))){
 
@@ -100,6 +98,9 @@ public class UserInterface{
                     case "99":
                         System.out.println("quitting");
                         return;
+                    case "11":
+                        contractMenu();
+                        break;
                     default:
                         System.out.println("Invalid entry! Please try again!");
                 }
@@ -129,7 +130,6 @@ public class UserInterface{
         int vin = Integer.parseInt(scanner.nextLine());
         ArrayList<Vehicle> inventory = new ArrayList<>();
 
-
         for (Vehicle v : dealership.getAllVehicles()) {
             if (v.getVin() == vin) {
                 //    inventory.remove(v);
@@ -155,23 +155,31 @@ public class UserInterface{
         try{
             Scanner scanner = new Scanner(System.in);
             FileWriter myWriter = new FileWriter("inventory.csv", true);
+
             System.out.println("What is the vin number? (5 numbers)");
             int vin = scanner.nextInt();
             scanner.nextLine();
+
             System.out.println("What is the year?");
             int year = scanner.nextInt();
             scanner.nextLine();
+
             System.out.println("What is the make?");
             String make = scanner.nextLine();
+
             System.out.println("What is the color?");
             String color = scanner.nextLine();
+
             System.out.println("what is the model?");
             String model = scanner.nextLine();
+
             System.out.println("What is the vehicle type?");
             String vehicleType = scanner.nextLine();
+
             System.out.println("What is the mileage?");
             int mileage = scanner.nextInt();
             scanner.nextLine();
+
             System.out.println("How much are you selling it for?");
             double price = scanner.nextDouble();
             scanner.nextLine();
@@ -188,13 +196,76 @@ public class UserInterface{
             System.out.println("Error while adding vehicle");
 
         }
+
+    }
+    private void contractMenu(){
+        System.out.println("Contract Menu");
+        System.out.println("1) sell Vehicle");
+        System.out.println("2) Lease Vehicle");
+        System.out.println("3) Return to main menu");
+        String choice = scanner.nextLine().trim();
+
+        switch (choice) {
+            case "1":
+                sale();
+                break;
+            case "2":
+                lease();
+            case "3":
+                System.out.println("returning to main menu");
+                break;
+            default:
+                System.out.println("error");
+                break;
+        }
+
+    }
+    private void sale(){
+        System.out.println("Enter your name:");
+        String name = scanner.nextLine();
+
+        System.out.println("Enter your email");
+        String email = scanner.nextLine();
+
+        System.out.println("Enter the VIN number of the vehicle:");
+        int vin = Integer.parseInt((scanner.nextLine()));
+
+        Vehicle vehicle = dealership.getVehicleByVin(vin);
+        Vehicle toRemove = null;
+        for (Vehicle v : dealership.getAllVehicles()) {
+            if (v.getVin() == vin) {
+                //    inventory.remove(v);
+                toRemove = v;
+                break;
+            }
+        }
+
+        if (toRemove != null) {
+            // remove the vehicle
+            dealership.getAllVehicles().remove(toRemove);
+
+            // save the updated dealership to CSV.
+            DealershipFileManager.saveDealership(dealership);
+            System.out.println("Vehicle has been removed ");
+
+        }
+        else {
+            System.out.println("Vehicle with vin: " + vin + " not found.");
+        }
+
+        if(vehicle == null){
+            System.out.println("Vehicle not found");
+            return;
+        }
+
     }
 
 
 
+    private void lease(){
+
+    }
 
     //Have the Menu here
-
-
 
 }

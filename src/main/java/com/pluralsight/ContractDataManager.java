@@ -5,13 +5,13 @@ import java.text.Format;
 public class ContractDataManager {
 
     public void saveContract(Contract contract) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("inventory.csv", true))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("Contract.csv", true))) {
                 String line = "";
                 // this is to see if the contract is a lease contract
                 if (contract instanceof LeaseContract){
                     LeaseContract lease = (LeaseContract) contract;
-                    //setting up the formate for what it will be printing out
-                    line = String.format("%s|%s|%s|%s|%.2f|%.2f|",
+                    //setting up the format for what it will be printing out
+                    line = String.format("Lease|%s|%s|%s|%s|%.2f|%.2f|",
                             lease.getDate(),
                             lease.getCustomerName(),
                             lease.getCustomerEmail(),
@@ -25,7 +25,7 @@ public class ContractDataManager {
 
                     //adding format for the sales contract
 
-                    line = String.format("%s|%s|%s|%s|%.2f|%.2f|",
+                    line = String.format("Sale|%s|%s|%s|%s|%.2f|%.2f|",
                             sale.getDate(),
                             sale.getCustomerName(),
                             sale.getCustomerEmail(),
@@ -40,7 +40,7 @@ public class ContractDataManager {
             System.out.println("Contract Saved: " + line);
 
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error");
         }
     }
